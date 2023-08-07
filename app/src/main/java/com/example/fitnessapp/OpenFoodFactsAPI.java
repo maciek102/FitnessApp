@@ -1,5 +1,9 @@
 package com.example.fitnessapp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,5 +40,30 @@ public class OpenFoodFactsAPI {
             e.printStackTrace();
         }
         return("Błąd podczas zapytania API.");
+    }
+
+    public static String returnInfo(String barcode){
+        String jsonResponse = getFoodProductInfo(barcode);  // Replace with your actual JSON response
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject productInfo = jsonObject.getJSONObject("product");
+
+            // Now you can extract specific information from the "productInfo" JSONObject
+            String productName = productInfo.optString("product_name", "Unknown Product Name");
+            String brands = productInfo.optString("brands", "Unknown Brand");
+            String categories = productInfo.optString("categories", "Unknown Categories");
+
+            // Print the extracted information
+            /*System.out.println("Product Name: " + productName);
+            System.out.println("Brands: " + brands);
+            System.out.println("Categories: " + categories);*/
+
+            return ("Product Name: " + productName + " Brands: " + brands + " Categories: " + categories);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "Error";
+        }
     }
 }
