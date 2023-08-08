@@ -43,27 +43,48 @@ public class OpenFoodFactsAPI {
     }
 
     public static String returnInfo(String barcode){
-        String jsonResponse = getFoodProductInfo(barcode);  // Replace with your actual JSON response
+        String jsonResponse = getFoodProductInfo(barcode);
 
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             JSONObject productInfo = jsonObject.getJSONObject("product");
 
-            // Now you can extract specific information from the "productInfo" JSONObject
             String productName = productInfo.optString("product_name", "Unknown Product Name");
             String brands = productInfo.optString("brands", "Unknown Brand");
-            String categories = productInfo.optString("categories", "Unknown Categories");
+            //String categories = productInfo.optString("categories", "Unknown Categories");
+            String ingredients_text = productInfo.optString("ingredients_text","Unknown ingredients");
 
-            // Print the extracted information
-            /*System.out.println("Product Name: " + productName);
-            System.out.println("Brands: " + brands);
-            System.out.println("Categories: " + categories);*/
-
-            return ("Product Name: " + productName + " Brands: " + brands + " Categories: " + categories);
+            return ("Product Name: " + productName + "\nBrands: " + brands + "\nIngredients: " + ingredients_text + "\nNutrition (for 100g): " + setNutritionList(productInfo));
+            //return ("Product Name: " + productName + " Brands: " + brands + " Ingredients: " + ingredients_text + "fat: " + fat);
 
         } catch (JSONException e) {
             e.printStackTrace();
             return "Error";
+        }
+    }
+
+    public static StringBuilder setNutritionList(JSONObject productInfo) throws JSONException {
+
+        String[] nutrientKeys = {"energy", "proteins", "sugars", "fat", "fiber" ,"casein","starch"};
+
+        StringBuilder nutritionList = new StringBuilder();
+
+        for (String nutrientKey : nutrientKeys) {
+            String nutrientValue = getNutrientValue(productInfo, nutrientKey);
+            nutritionList.append(nutrientKey + ": " + nutrientValue + ", ");
+        }
+
+        nutritionList.delete(nutritionList.length()-2,nutritionList.length()-1);
+
+        return nutritionList;
+    }
+
+    public static String getNutrientValue(JSONObject productInfo, String nutrientKey) throws JSONException {
+        JSONObject nutriments = productInfo.getJSONObject("nutriments");
+        if (nutriments.has(nutrientKey)) {
+            return String.valueOf(nutriments.getDouble(nutrientKey));
+        } else {
+            return "-";  // If key is not present
         }
     }
 }

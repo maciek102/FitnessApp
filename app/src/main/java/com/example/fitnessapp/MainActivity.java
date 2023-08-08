@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         if(result.getContents() != null){
 
             productInfoLayout();
-            temp=findViewById(R.id.textView);
+            temp=findViewById(R.id.productInfoList);
             //temp.setText(result.getContents());
-            new FetchProductInfoTask().execute(result.getContents());
+            new FetchProductInfoTask(temp).execute(result.getContents());
         }
     });
 
@@ -66,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     //Performing network request asynchronously not to perform network operations on main thread, to avoid freezing the application
     private class FetchProductInfoTask extends AsyncTask<String, Void, String> {
 
+        private TextView textView;
+
+        public FetchProductInfoTask(TextView textView) {
+            this.textView = textView;
+        }
+
         @Override
         protected String doInBackground(String... barcodes) {
             if (barcodes.length > 0) {
@@ -78,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            temp.setText(response);
+            if(textView != null) {
+                textView.setText(response);
+            }
         }
     }
 }
