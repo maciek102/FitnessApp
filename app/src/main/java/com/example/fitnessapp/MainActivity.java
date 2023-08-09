@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         btnScan.setOnClickListener(y ->{
             scanCode();
         });
-
-        /*display = findViewById(R.id.text1);
-        new FetchProductInfoTask().execute("737628064502");*/
     }
 
     private void scanCode(){
@@ -50,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
             productInfoLayout();
             temp=findViewById(R.id.productInfoList);
-            //temp.setText(result.getContents());
             new FetchProductInfoTask(temp).execute(result.getContents());
         }
     });

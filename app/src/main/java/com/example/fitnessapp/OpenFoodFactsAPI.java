@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
 
 public class OpenFoodFactsAPI {
 
@@ -45,17 +47,15 @@ public class OpenFoodFactsAPI {
     public static String returnInfo(String barcode){
         String jsonResponse = getFoodProductInfo(barcode);
 
-        try {
+       try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             JSONObject productInfo = jsonObject.getJSONObject("product");
 
             String productName = productInfo.optString("product_name", "Unknown Product Name");
             String brands = productInfo.optString("brands", "Unknown Brand");
-            //String categories = productInfo.optString("categories", "Unknown Categories");
             String ingredients_text = productInfo.optString("ingredients_text","Unknown ingredients");
 
-            return ("Product Name: " + productName + "\nBrands: " + brands + "\nIngredients: " + ingredients_text + "\nNutrition (for 100g): " + setNutritionList(productInfo));
-            //return ("Product Name: " + productName + " Brands: " + brands + " Ingredients: " + ingredients_text + "fat: " + fat);
+            return (brands + " - " + productName + "\n\nIngredients: " + ingredients_text + "\n\nMain nutrients (for 100g): " + setMainNutritionList(productInfo) + "\n\nNutrients (for 100g): " + setNutritionList(productInfo));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -63,15 +63,15 @@ public class OpenFoodFactsAPI {
         }
     }
 
-    public static StringBuilder setNutritionList(JSONObject productInfo) throws JSONException {
+    public static StringBuilder setMainNutritionList(JSONObject productInfo) throws JSONException {
 
-        String[] nutrientKeys = {"energy", "proteins", "sugars", "fat", "fiber" ,"casein","starch"};
+        String[] nutrientKeys = {"energy", "proteins", "fat","carbohydrates", "sugars"};
 
         StringBuilder nutritionList = new StringBuilder();
 
         for (String nutrientKey : nutrientKeys) {
             String nutrientValue = getNutrientValue(productInfo, nutrientKey);
-            nutritionList.append(nutrientKey + ": " + nutrientValue + ", ");
+            nutritionList.append("\n" + nutrientKey + ": " + nutrientValue);
         }
 
         nutritionList.delete(nutritionList.length()-2,nutritionList.length()-1);
@@ -84,7 +84,23 @@ public class OpenFoodFactsAPI {
         if (nutriments.has(nutrientKey)) {
             return String.valueOf(nutriments.getDouble(nutrientKey));
         } else {
-            return "-";  // If key is not present
+            return "0.0";  // If key is not present
         }
+    }
+
+    public static StringBuilder setNutritionList(JSONObject productInfo) throws JSONException {
+
+        String[] nutrientKeys = {"casein", "serum-proteins", "nucleotides", "sucrose", "glucose", "fructose", "lactose", "maltose", "maltodextrins", "starch", "polyols", "saturated-fat", "butyric-acid", "caproic-acid", "caprylic-acid", "capric-acid", "lauric-acid", "myristic-acid", "palmitic-acid", "stearic-acid", "arachidic-acid", "behenic-acid", "lignoceric-acid", "cerotic-acid", "montanic-acid", "melissic-acid", "monounsaturated-fat", "polyunsaturated-fat", "omega-3-fat", "alpha-linolenic-acid", "eicosapentaenoic-acid", "docosahexaenoic-acid", "omega-6-fat", "linoleic-acid", "arachidonic-acid", "gamma-linolenic-acid", "dihomo-gamma-linolenic-acid", "omega-9-fat", "oleic-acid", "elaidic-acid", "gondoic-acid", "mead-acid", "erucic-acid", "nervonic-acid", "trans-fat", "cholesterol", "fiber", "sodium", "alcohol: % vol of alcohol", "vitamin-a", "vitamin-d", "vitamin-e", "vitamin-k", "vitamin-c", "vitamin-b1", "vitamin-b2", "vitamin-pp", "vitamin-b6", "vitamin-b9", "vitamin-b12", "biotin", "pantothenic-acid", "silica", "bicarbonate", "potassium", "chloride", "calcium", "phosphorus", "iron", "magnesium", "zinc", "copper", "manganese", "fluoride", "selenium", "chromium", "molybdenum", "iodine", "caffeine", "taurine"};
+
+        StringBuilder nutritionList = new StringBuilder();
+
+        for (String nutrientKey : nutrientKeys) {
+            String nutrientValue = getNutrientValue(productInfo, nutrientKey);
+            nutritionList.append(nutrientKey + ": " + nutrientValue + ", ");
+        }
+
+        nutritionList.delete(nutritionList.length()-2,nutritionList.length()-1);
+
+        return nutritionList;
     }
 }
