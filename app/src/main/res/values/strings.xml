@@ -3,4 +3,6 @@
 
     <string name="Scan">Scan</string>
     <string name="productInfoList">Loading...</string>
+    <string name="backToMenu">BACK</string>
+    <string name="addProduct">ADD PRODUCT</string>
 </resources>
