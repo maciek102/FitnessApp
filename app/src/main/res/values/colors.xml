@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mainBackground">#212121</color>
     <color name="buttonScanColor">#306844</color>
+    <color name="progressInside">#FFA500</color>
+    <color name="progressOutside">#DDD</color>
 </resources>

@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background ring -->
     <item>
         <shape
             android:shape="ring"
-            android:useLevel="false">
-            <solid android:color="@color/white" />
-            <size
-                android:width="8dp"
-                android:height="8dp" />
+            android:useLevel="false"
+            android:thicknessRatio="16" >
+            <solid android:color="@color/progressOutside" />
         </shape>
     </item>
-    <!-- Progress ring -->
     <item>
+        <rotate
+            android:fromDegrees="90"
+            android:toDegrees="90">
         <shape
             android:shape="ring"
-            android:useLevel="true">
-            <solid android:color="@color/buttonScanColor" />
-            <size
-                android:width="8dp"
-                android:height="8dp" />
+            android:useLevel="true"
+            android:thicknessRatio="16">
+            <solid android:color="@color/progressInside" />
         </shape>
+        </rotate>
     </item>
 </layer-list>
 

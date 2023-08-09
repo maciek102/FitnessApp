@@ -55,7 +55,7 @@ public class OpenFoodFactsAPI {
             String brands = productInfo.optString("brands", "Unknown Brand");
             String ingredients_text = productInfo.optString("ingredients_text","Unknown ingredients");
 
-            return (brands + " - " + productName + "\n\nIngredients: " + ingredients_text + "\n\nMain nutrients (for 100g): " + setMainNutritionList(productInfo) + "\n\nNutrients (for 100g): " + setNutritionList(productInfo));
+            return (brands + " - " + productName + "\n\nIngredients: " + ingredients_text + "\n\nMain nutrients (for 100g): " + setMainNutritionList(productInfo) + "\n\nNutrients (for 100g):\n" + setNutritionList(productInfo));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -79,15 +79,6 @@ public class OpenFoodFactsAPI {
         return nutritionList;
     }
 
-    public static String getNutrientValue(JSONObject productInfo, String nutrientKey) throws JSONException {
-        JSONObject nutriments = productInfo.getJSONObject("nutriments");
-        if (nutriments.has(nutrientKey)) {
-            return String.valueOf(nutriments.getDouble(nutrientKey));
-        } else {
-            return "0.0";  // If key is not present
-        }
-    }
-
     public static StringBuilder setNutritionList(JSONObject productInfo) throws JSONException {
 
         String[] nutrientKeys = {"casein", "serum-proteins", "nucleotides", "sucrose", "glucose", "fructose", "lactose", "maltose", "maltodextrins", "starch", "polyols", "saturated-fat", "butyric-acid", "caproic-acid", "caprylic-acid", "capric-acid", "lauric-acid", "myristic-acid", "palmitic-acid", "stearic-acid", "arachidic-acid", "behenic-acid", "lignoceric-acid", "cerotic-acid", "montanic-acid", "melissic-acid", "monounsaturated-fat", "polyunsaturated-fat", "omega-3-fat", "alpha-linolenic-acid", "eicosapentaenoic-acid", "docosahexaenoic-acid", "omega-6-fat", "linoleic-acid", "arachidonic-acid", "gamma-linolenic-acid", "dihomo-gamma-linolenic-acid", "omega-9-fat", "oleic-acid", "elaidic-acid", "gondoic-acid", "mead-acid", "erucic-acid", "nervonic-acid", "trans-fat", "cholesterol", "fiber", "sodium", "alcohol: % vol of alcohol", "vitamin-a", "vitamin-d", "vitamin-e", "vitamin-k", "vitamin-c", "vitamin-b1", "vitamin-b2", "vitamin-pp", "vitamin-b6", "vitamin-b9", "vitamin-b12", "biotin", "pantothenic-acid", "silica", "bicarbonate", "potassium", "chloride", "calcium", "phosphorus", "iron", "magnesium", "zinc", "copper", "manganese", "fluoride", "selenium", "chromium", "molybdenum", "iodine", "caffeine", "taurine"};
@@ -102,5 +93,14 @@ public class OpenFoodFactsAPI {
         nutritionList.delete(nutritionList.length()-2,nutritionList.length()-1);
 
         return nutritionList;
+    }
+
+    public static String getNutrientValue(JSONObject productInfo, String nutrientKey) throws JSONException {
+        JSONObject nutriments = productInfo.getJSONObject("nutriments");
+        if (nutriments.has(nutrientKey)) {
+            return String.valueOf(nutriments.getDouble(nutrientKey));
+        } else {
+            return "0.0";  // If key is not present
+        }
     }
 }

@@ -5,4 +5,5 @@
     <string name="productInfoList">Loading...</string>
     <string name="backToMenu">BACK</string>
     <string name="addProduct">ADD PRODUCT</string>
+    <string name="menuSign">Today</string>
 </resources>

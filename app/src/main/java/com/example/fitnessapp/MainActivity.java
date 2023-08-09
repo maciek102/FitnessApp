@@ -15,22 +15,13 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 public class MainActivity extends AppCompatActivity {
     private TextView productInfoText;
-    private AppCompatButton btnScan;
-    private AppCompatButton btnBackToMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       /* btnScan = findViewById(R.id.buttonScan);
-        btnScan.setOnClickListener(y ->{
-            scanCode();
-        });*/
-
-        //View productInfoLayout = LayoutInflater.from(this).inflate(R.layout.product_info,null);
-        //btnBackToMenu = productInfoLayout.findViewById(R.id.buttonBackToMenu);
-        //btnBackToMenu.setOnClickListener(v -> backToMenu());
     }
 
     public void scanCode(View view){
