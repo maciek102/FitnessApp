@@ -41,7 +41,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                android:onClick="addProductToProgress"/>
 
         </TableRow>
     </TableLayout>
