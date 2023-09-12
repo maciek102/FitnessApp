@@ -27,8 +27,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    protected ProductNutrition productNutrition = new ProductNutrition();
-    protected NutritionHistory nutritionHistory = new NutritionHistory();
+    protected ProductNutrition productNutrition;
+    protected NutritionHistory nutritionHistory;
     private double limit = 1000;
 
     @Override
@@ -36,8 +36,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        productNutrition = new ProductNutrition();
+        nutritionHistory = new NutritionHistory();
         nutritionHistory = NutritionHistory.deserialize(this);
-        setStatistics(nutritionHistory.getLastElement());
+        if(nutritionHistory != null){
+            setStatistics(nutritionHistory.getLastElement());
+        }
+        else{
+            setStatistics(new NutritionData());
+        }
     }
 
     public void scanCode(View view){
@@ -130,48 +137,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setStatistics(NutritionData obj){
-        /*DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        String roundedValue = null;
-        double grams = Double.parseDouble(quantity);
-
-        TextView textView = findViewById(R.id.textViewProgressEnergy);
-        double amount = (obj.getEnergy()*grams)/100;
-        roundedValue = decimalFormat.format(amount);
-        textView.setText(roundedValue + "/" + limit);
-        ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
-        progressBar.setProgress((int)((obj.getEnergy()/limit)*100));
-
-        textView = findViewById(R.id.textViewProgressProteins);
-        amount = (obj.getProteins()*grams)/100;
-        roundedValue = decimalFormat.format(amount);
-        textView.setText(roundedValue + "/" + limit);
-        progressBar = findViewById(R.id.progressBarProteins);
-        progressBar.setProgress((int)((obj.getProteins()/limit)*100));
-
-        textView = findViewById(R.id.textViewProgressCarbohydrates);
-        amount = (obj.getCarbohydrates()*grams)/100;
-        roundedValue = decimalFormat.format(amount);
-        textView.setText(roundedValue + "/" + limit);
-        progressBar = findViewById(R.id.progressBarCarbohydrates);
-        progressBar.setProgress((int)((obj.getCarbohydrates()/limit)*100));
-
-        textView = findViewById(R.id.textViewProgressFat);
-        amount = (obj.getFat()*grams)/100;
-        roundedValue = decimalFormat.format(amount);
-        textView.setText(roundedValue + "/" + limit);
-        progressBar = findViewById(R.id.progressBarFat);
-        progressBar.setProgress((int)((obj.getFat()/limit)*100));
-
-        textView = findViewById(R.id.textViewProgressSugars);
-        amount = (obj.getSugars()*grams)/100;
-        roundedValue = decimalFormat.format(amount);
-        textView.setText(roundedValue + "/" + limit);
-        progressBar = findViewById(R.id.progressBarSugars);
-        progressBar.setProgress((int)((obj.getSugars()/limit)*100));*/
-
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         String roundedValue = null;
-
 
         TextView textView = findViewById(R.id.textViewProgressEnergy);
         roundedValue = decimalFormat.format(obj.getEnergy());
