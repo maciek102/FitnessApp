@@ -1,13 +1,20 @@
 package com.example.fitnessapp;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,15 +22,22 @@ import android.widget.TextView;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.text.DecimalFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
-    private ProductNutrition productNutrition = new ProductNutrition();
+    protected ProductNutrition productNutrition = new ProductNutrition();
+    protected NutritionHistory nutritionHistory = new NutritionHistory();
     private double limit = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nutritionHistory = NutritionHistory.deserialize(this);
+        setStatistics(nutritionHistory.getLastElement());
     }
 
     public void scanCode(View view){
@@ -39,20 +53,48 @@ public class MainActivity extends AppCompatActivity {
 
             productInfoLayout();
             TextView productInfoText = findViewById(R.id.productInfoList);
+            //productNutrition.setProductNutrition(result.getContents());
             new FetchProductInfoTask(productInfoText).execute(result.getContents());
+            //productNutrition.setProductNutrition(result.getContents());
         }
     });
 
     public void addProductToProgress(View view){
-        setContentView(R.layout.activity_main);
-        TextView textView = findViewById(R.id.textViewProgressEnergy);
-        textView.setText(productNutrition.getEnergy() + "/" + limit);
-        ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
-        progressBar.setProgress((int)((productNutrition.getEnergy()/limit)*100));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_title);
+
+        final EditText input = new EditText(this);
+        input.setHint(R.string.dialog_message);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.dialog_save, (dialog, id) -> {
+            String userInput = input.getText().toString();
+            if (!userInput.isEmpty()) {
+                double quantity = Double.parseDouble(userInput);
+                NutritionData nutritionData = new NutritionData(productNutrition.getDate(), (productNutrition.getEnergy()*quantity)/100, (productNutrition.getProteins()*quantity)/100, (productNutrition.getCarbohydrates()*quantity)/100, (productNutrition.getSugars()*quantity)/100, (productNutrition.getFat()*quantity)/100);
+                nutritionHistory.pushObj(nutritionData);
+                nutritionHistory.serialize(this);
+
+                NutritionData temp = nutritionHistory.getLastElement();
+
+                setContentView(R.layout.activity_main);
+                setStatistics(temp);
+            }
+            else{
+            dialog.cancel();
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, (dialog, id) -> {
+            dialog.cancel();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void mainLayout(View view){
         setContentView(R.layout.activity_main);
+        setStatistics(nutritionHistory.getLastElement());
     }
 
     public void productInfoLayout(){
@@ -85,5 +127,80 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(response);
             }
         }
+    }
+
+    private void setStatistics(NutritionData obj){
+        /*DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        String roundedValue = null;
+        double grams = Double.parseDouble(quantity);
+
+        TextView textView = findViewById(R.id.textViewProgressEnergy);
+        double amount = (obj.getEnergy()*grams)/100;
+        roundedValue = decimalFormat.format(amount);
+        textView.setText(roundedValue + "/" + limit);
+        ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
+        progressBar.setProgress((int)((obj.getEnergy()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressProteins);
+        amount = (obj.getProteins()*grams)/100;
+        roundedValue = decimalFormat.format(amount);
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarProteins);
+        progressBar.setProgress((int)((obj.getProteins()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressCarbohydrates);
+        amount = (obj.getCarbohydrates()*grams)/100;
+        roundedValue = decimalFormat.format(amount);
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarCarbohydrates);
+        progressBar.setProgress((int)((obj.getCarbohydrates()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressFat);
+        amount = (obj.getFat()*grams)/100;
+        roundedValue = decimalFormat.format(amount);
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarFat);
+        progressBar.setProgress((int)((obj.getFat()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressSugars);
+        amount = (obj.getSugars()*grams)/100;
+        roundedValue = decimalFormat.format(amount);
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarSugars);
+        progressBar.setProgress((int)((obj.getSugars()/limit)*100));*/
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        String roundedValue = null;
+
+
+        TextView textView = findViewById(R.id.textViewProgressEnergy);
+        roundedValue = decimalFormat.format(obj.getEnergy());
+        textView.setText(roundedValue + "/" + limit);
+        ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
+        progressBar.setProgress((int)((obj.getEnergy()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressProteins);
+        roundedValue = decimalFormat.format(obj.getProteins());
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarProteins);
+        progressBar.setProgress((int)((obj.getProteins()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressCarbohydrates);
+        roundedValue = decimalFormat.format(obj.getCarbohydrates());
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarCarbohydrates);
+        progressBar.setProgress((int)((obj.getCarbohydrates()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressFat);
+        roundedValue = decimalFormat.format(obj.getFat());
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarFat);
+        progressBar.setProgress((int)((obj.getFat()/limit)*100));
+
+        textView = findViewById(R.id.textViewProgressSugars);
+        roundedValue = decimalFormat.format(obj.getSugars());
+        textView.setText(roundedValue + "/" + limit);
+        progressBar = findViewById(R.id.progressBarSugars);
+        progressBar.setProgress((int)((obj.getSugars()/limit)*100));
     }
 }

@@ -3,7 +3,12 @@ package com.example.fitnessapp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class ProductNutrition {
+
+    private Date date;
     private double energy;
     private double proteins;
     private double carbohydrates;
@@ -30,7 +35,12 @@ public class ProductNutrition {
         return fat;
     }
 
+    public Date getDate(){
+        return date;
+    }
+
     ProductNutrition(){
+        date = null;
         energy = 0;
         proteins = 0;
         carbohydrates = 0;
@@ -46,6 +56,7 @@ public class ProductNutrition {
             JSONObject productInfo = jsonObject.getJSONObject("product");
             JSONObject nutriments = productInfo.getJSONObject("nutriments");
 
+            date = new Date();
             energy = getNutrimentValue(nutriments, "energy");
             proteins = getNutrimentValue(nutriments, "proteins");
             carbohydrates = getNutrimentValue(nutriments, "carbohydrates");
