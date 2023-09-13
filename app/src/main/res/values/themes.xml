@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.FitnessApp" parent="Base.Theme.FitnessApp" />
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/mainBackground</item>
+    </style>
 </resources>
