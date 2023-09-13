@@ -4,13 +4,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,21 +23,24 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    protected ProductNutrition productNutrition;
-    protected NutritionHistory nutritionHistory;
-    protected MainMenuOperations mainMenuOperations;
+    private ProductNutrition productNutrition;
+    private NutritionHistory nutritionHistory;
+    private MainMenuOperations mainMenuOperations;
+    protected SharedPreferences sharedPreferences;
     private double limitEnergy = 1000;
     private double limitProteins = 1000;
     private double limitCarbohydrates = 1000;
     private double limitFat = 1000;
     private double limitSugars = 1000;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ViewGroup mainLayout = findViewById(R.id.mainLayout);
+
+        sharedPreferences = getSharedPreferences("MyLimits", Context.MODE_PRIVATE);
+        initializePreferences();
 
         productNutrition = new ProductNutrition();
         nutritionHistory = new NutritionHistory();
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 NutritionData temp = nutritionHistory.getLastElement();
 
-                setContentView(R.layout.activity_main);
+                mainLayout(view);
                 setStatistics(temp);
             }
             else{
@@ -106,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if(nutritionHistory != null){
             setStatistics(nutritionHistory.getLastElement());
+            ViewGroup mainLayout = findViewById(R.id.mainLayout);
+            mainMenuOperations.setProgressBars(mainLayout,this);
         }
         else{
             setStatistics(new NutritionData());
@@ -218,6 +225,25 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(roundedValue + "/" + limitSugars);
         progressBar = findViewById(R.id.progressBarSugars);
         progressBar.setProgress((int)((nutritionHistory.getLastElement().getSugars()/limitSugars)*100));
+    }
+
+    public void initializePreferences(){
+        limitEnergy = retrievePreference("limitEnergy");
+        limitProteins = retrievePreference("limitProteins");
+        limitCarbohydrates = retrievePreference("limitCarbohydrates");
+        limitFat = retrievePreference("limitFat");
+        limitSugars = retrievePreference("limitSugars");
+    }
+
+    public void savePreference(String name, double value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(name, String.valueOf(value));
+        editor.apply();
+    }
+
+    public double retrievePreference(String name){
+        String value = sharedPreferences.getString(name,"1000");
+        return Double.parseDouble(value);
     }
 
     public void setLimitEnergy(double limitEnergy) {

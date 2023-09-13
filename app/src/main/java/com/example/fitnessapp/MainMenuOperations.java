@@ -43,18 +43,23 @@ public class MainMenuOperations {
                     switch (variableName) {
                         case "limitEnergy":
                             activity.setLimitEnergy(newValue);
+                            activity.savePreference("limitEnergy",newValue);
                             break;
                         case "limitProteins":
                             activity.setLimitProteins(newValue);
+                            activity.savePreference("limitProteins",newValue);
                             break;
                         case "limitCarbohydrates":
                             activity.setLimitCarbohydrates(newValue);
+                            activity.savePreference("limitCarbohydrates",newValue);
                             break;
                         case "limitFat":
                             activity.setLimitFat(newValue);
+                            activity.savePreference("limitFat",newValue);
                             break;
                         case "limitSugars":
                             activity.setLimitSugars(newValue);
+                            activity.savePreference("limitSugars",newValue);
                             break;
                         default:
                             activity.setStatistics();
