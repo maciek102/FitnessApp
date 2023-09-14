@@ -12,5 +12,7 @@
     <string name="dialog_save">SAVE</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_limit_title">Set limit</string>
-    <string name="dialog_limit_massage">Enter limit (g)</string>
+    <string name="dialog_limit_massage">Enter limit</string>
+    <string name="kcal_text">kcal</string>
+    <string name="g_text">g</string>
 </resources>

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 public class ProductNutrition {
 
@@ -70,7 +71,15 @@ public class ProductNutrition {
 
     public double getNutrimentValue(JSONObject nutriments, String key) throws JSONException {
         if(nutriments.has(key)){
-            return nutriments.getDouble(key);
+            if(Objects.equals(key, "energy")){
+                double energy_kj = nutriments.getDouble(key);
+                double energy_kcal = energy_kj / 4.184;
+                double roundedEnergy = Math.round(energy_kcal * 10.0) / 10.0;
+                return roundedEnergy;
+            }
+            else{
+                return nutriments.getDouble(key);
+            }
         }
         else {
             return 0.0;

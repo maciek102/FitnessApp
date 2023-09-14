@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -98,7 +99,14 @@ public class OpenFoodFactsAPI {
     public static String getNutrientValue(JSONObject productInfo, String nutrientKey) throws JSONException {
         JSONObject nutriments = productInfo.getJSONObject("nutriments");
         if (nutriments.has(nutrientKey)) {
-            return String.valueOf(nutriments.getDouble(nutrientKey));
+            if(nutrientKey == "energy") {
+                double energy_kj = nutriments.getDouble(nutrientKey);
+                String energy_kcal = String.format("%.1f", energy_kj / 4.184);
+                return energy_kcal;
+            }
+            else{
+                return String.valueOf(nutriments.getDouble(nutrientKey));
+            }
         } else {
             return "0.0";  // If key is not present
         }

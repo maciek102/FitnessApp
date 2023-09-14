@@ -7,4 +7,6 @@
     <color name="progressInside">#FFA500</color>
     <color name="progressOutside">#DDD</color>
     <color name="hintColor">#696969</color>
+    <color name="progressOverLimit">#FF4500</color>
+    <color name="progressCloseLimit">#212121</color>
 </resources>

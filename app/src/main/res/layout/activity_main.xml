@@ -92,6 +92,15 @@
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/kcal_text"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
                 </FrameLayout>
 
                 <FrameLayout
@@ -117,6 +126,15 @@
                         android:layout_gravity="center"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/g_text"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                 </FrameLayout>
             </TableRow>
@@ -165,6 +183,15 @@
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/g_text"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
                 </FrameLayout>
 
                 <FrameLayout
@@ -190,6 +217,15 @@
                         android:layout_gravity="center"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/g_text"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                 </FrameLayout>
             </TableRow>
@@ -237,6 +273,15 @@
                         android:layout_gravity="center"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/g_text"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                 </FrameLayout>
 

@@ -1,12 +1,15 @@
 package com.example.fitnessapp;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 public class MainMenuOperations {
 
@@ -80,5 +83,11 @@ public class MainMenuOperations {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+    }
+
+    public static void changeProgressColor(ProgressBar progressBar){
+        if(progressBar.getProgress() >= 50 && progressBar.getProgress() <= 100){
+            progressBar.setBackground(ContextCompat.getDrawable(progressBar.getContext(), R.drawable.progress_inside_green));
+        }
     }
 }

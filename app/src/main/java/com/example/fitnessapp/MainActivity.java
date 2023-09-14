@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(roundedValue + "/" + limitEnergy);
         ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
         progressBar.setProgress((int)((obj.getEnergy()/limitEnergy)*100));
+        //MainMenuOperations.changeProgressColor(progressBar);
 
         textView = findViewById(R.id.textViewProgressProteins);
         roundedValue = decimalFormat.format(obj.getProteins());
@@ -201,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(roundedValue + "/" + limitEnergy);
         ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
         progressBar.setProgress((int)((nutritionHistory.getLastElement().getEnergy()/limitEnergy)*100));
+        //MainMenuOperations.changeProgressColor(progressBar);
 
         textView = findViewById(R.id.textViewProgressProteins);
         roundedValue = decimalFormat.format(nutritionHistory.getLastElement().getProteins());
@@ -257,12 +261,15 @@ public class MainActivity extends AppCompatActivity {
     public void setLimitCarbohydrates(double limitCarbohydrates) {
         this.limitCarbohydrates = limitCarbohydrates;
     }
-
     public void setLimitFat(double limitFat) {
         this.limitFat = limitFat;
     }
 
     public void setLimitSugars(double limitSugars) {
         this.limitSugars = limitSugars;
+    }
+
+    public NutritionHistory getNutritionHistory() {
+        return nutritionHistory;
     }
 }
