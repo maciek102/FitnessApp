@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,11 +13,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.transition.Fade;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -59,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void scanCode(View view){
+        Toast.makeText(getApplicationContext(),"Scan product", Toast.LENGTH_SHORT).show();
+
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");
         options.setOrientationLocked(true);
@@ -110,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mainLayout(View view){
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_main);
         if(nutritionHistory != null){
             setStatistics(nutritionHistory.getLastElement());
@@ -166,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
         progressBar.setProgress((int)((obj.getEnergy()/limitEnergy)*100));
         //MainMenuOperations.changeProgressColor(progressBar);
+        //ObjectAnimator.ofInt(progressBar, "progress", (int)((nutritionHistory.getLastElement().getEnergy()/limitEnergy)*100))
+               // .setDuration(300)
+               // .start();
 
         textView = findViewById(R.id.textViewProgressProteins);
         roundedValue = decimalFormat.format(obj.getProteins());
@@ -205,6 +224,9 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBarEnergy);
         progressBar.setProgress((int)((nutritionHistory.getLastElement().getEnergy()/limitEnergy)*100));
         //MainMenuOperations.changeProgressColor(progressBar);
+        //ObjectAnimator.ofInt(progressBar, "progress", (int)((nutritionHistory.getLastElement().getEnergy()/limitEnergy)*100))
+                //.setDuration(300)
+                //.start();
 
         textView = findViewById(R.id.textViewProgressProteins);
         roundedValue = decimalFormat.format(nutritionHistory.getLastElement().getProteins());

@@ -86,8 +86,10 @@ public class MainMenuOperations {
     }
 
     public static void changeProgressColor(ProgressBar progressBar){
+        int progress = progressBar.getProgress();
         if(progressBar.getProgress() >= 50 && progressBar.getProgress() <= 100){
-            progressBar.setBackground(ContextCompat.getDrawable(progressBar.getContext(), R.drawable.progress_inside_green));
+            progressBar.setForeground(ContextCompat.getDrawable(progressBar.getContext(), R.drawable.progress_inside_green));
+            progressBar.setProgress(progress);
         }
     }
 }
